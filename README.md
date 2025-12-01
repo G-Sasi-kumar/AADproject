@@ -617,89 +617,13 @@ if sat:
 
 ---
 
-## Benchmarking Pipeline
+
 
 ### Overview
 Complete automated benchmarking system that:
 1. Generates problem instances of increasing size
 2. Measures runtime and solution quality
 3. Creates publication-ready visualizations
-
-### File Structure
-
-bench/
-├── run.py    → Generate CSV data files
-└── plots.py  → Create PNG graphs from CSVs
-
-
-### Running Complete Benchmark Suite
-
-*Step 1: Generate Data*
-bash
-cd /path/to/project
-source venv/bin/activate
-python3 -m bench.run
-
-
-This creates:
-- data/sat_runtime.csv - SAT solver performance metrics
-- data/vertexcover_runtime.csv - VC exact vs approx runtimes
-- data/hampath_runtime.csv - Hamiltonian path search times
-- data/subsetsum_runtime.csv - Subset sum algorithm comparison
-
-*Step 2: Generate Plots*
-bash
-python3 -m bench.plots
-
-
-This creates:
-- data/plot_sat_runtime.png
-- data/plot_vertexcover_runtime.png
-- data/plot_vertexcover_quality.png
-- data/plot_hampath_runtime.png
-- data/plot_subsetsum_runtime.png
-
-### Benchmark Parameters
-
-*SAT Solver:*
-python
-# In bench/run.py
-n_vars_range = range(5, 25, 2)      
-clause_ratio = 4.3                   
-trials_per_size = 5                  
-
-
-*Vertex Cover:*
-python
-n_vertices_range = range(4, 16)      
-edge_probability = 0.4               
-trials = 3
-
-
-*Hamiltonian Path:*
-python
-n_vertices_range = range(4, 14)      
-edge_probability = 0.5
-trials = 5
-
-
-*Subset Sum:*
-python
-n_elements_range = range(10, 30, 2)  
-max_value = 100
-trials = 3
-
-
-### Viewing Results
-
-*CSV Files:*
-bash
-# View raw data
-cat data/sat_runtime.csv
-head -20 data/vertexcover_runtime.csv
-
-# Statistics
-python3 -c "import pandas as pd; print(pd.read_csv('data/sat_runtime.csv').describe())"
 
 
 *Graphs (Ubuntu with GUI):*
@@ -720,48 +644,7 @@ bash
 scp user@server:/path/to/data/*.png ./local_plots/
 
 # Or use terminal image viewer
-sudo apt install fbi
-fbi data/plot_sat_runtime.png
-
-
-### Customizing Benchmarks
-
-*Reduce Problem Sizes (faster benchmarks):*
-python
-# Edit bench/run.py
-sat_sizes = range(5, 15)        
-vc_sizes = range(4, 10)         
-
-
-*Increase Precision (more trials):*
-python
-# Edit bench/run.py
-TRIALS_SAT = 10                 
-TRIALS_VC = 5                   
-
-
-*Custom Metrics:*
-python
-# In bench/run.py, add columns to CSV:
-with open('data/sat_runtime.csv', 'a') as f:
-    writer = csv.writer(f)
-    writer.writerow([n_vars, runtime, nodes, 
-                     memory_usage, backtrack_count])
-
-
-### Expected Runtimes
-
-| Benchmark | Duration | Output Size |
-|-----------|----------|-------------|
-| SAT | 5-15 min | ~100 KB CSV |
-| Vertex Cover | 10-30 min | ~50 KB CSV |
-| Hamiltonian Path | 5-20 min | ~75 KB CSV |
-| Subset Sum | 5-15 min | ~60 KB CSV |
-| *Total* | *25-80 min* | *~300 KB* |
-
----
-
-## Installation & Setup
+|-----------|----------|--## Installation & Setup
 
 ### Ubuntu / Debian
 
@@ -893,19 +776,7 @@ print(f'Encoded: {n_vars} vars, {len(clauses)} clauses')
 # =========================
 python3 -m bonus.sudoku_sat
 
-# =========================
-# BENCHMARKING
-# =========================
 
-# Generate all data
-python3 -m bench.run
-
-# Create all plots
-python3 -m bench.plots
-
-# View results
-ls -lh data/
-xdg-open data/plot_sat_runtime.png
 
 # =========================
 # ANALYSIS
@@ -1035,8 +906,7 @@ bonus/
   ├── __init__.py        
   └── sudoku_sat.py       
 
-data/                     
-utils/                    
+data            
 README.md                  
 requirements.txt           
 
@@ -1231,11 +1101,3 @@ def verify_reduction(instance_a, instance_b, solution_b):
 
 ---
 
-## License and Usage
-
-This project is designed for educational purposes to demonstrate:
-- Fundamental concepts in computational complexity
-- Practical algorithm implementation
-- Empirical analysis of theoretical bounds
-
-Feel free to use, modify, and extend for academic projects.
